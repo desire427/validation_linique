@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mieux se connaître</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="header-tag">Formulaire d'intégration</span>
+      <h1 class="header-title">Mieux se connaître</h1>
+      <p class="header-sub">Quelques infos pour briser la glace et construire ta fiche de profil.</p>
+    </div>
+    <div class="header-line"></div>
+  </header>
+
+  <main class="main-content">
+    <form id="profileForm" novalidate>
+
+      <!-- IDENTITÉ -->
+      <section class="form-section">
+        <div class="section-label">01 — Identité</div>
+
+        <div class="field-group">
+          <div class="field">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" placeholder="Ton prénom" autocomplete="given-name" />
+            <span class="field-error" id="prenom-error"></span>
+          </div>
+          <div class="field">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" placeholder="Ton nom de famille" autocomplete="family-name" />
+            <span class="field-error" id="nom-error"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="form-section">
+        <div class="section-label">02 — Contact</div>
+        <div class="field">
+          <label for="email">Adresse email</label>
+          <input type="email" id="email" name="email" placeholder="prenom.nom@formation.fr" autocomplete="email" />
+          <span class="field-error" id="email-error"></span>
+        </div>
+      </section>
+
+      <!-- PROFIL TECHNIQUE -->
+      <section class="form-section">
+        <div class="section-label">03 — Profil technique</div>
+        <div class="field">
+          <label for="domaine">Ton domaine de prédilection</label>
+          <select id="domaine" name="domaine">
+            <option value="">Sélectionne ton domaine...</option>
+            <option value="frontend">Front-End</option>
+            <option value="backend">Back-End</option>
+            <option value="design">Design / UX</option>
+            <option value="data">Data</option>
+          </select>
+          <span class="field-error" id="domaine-error"></span>
+        </div>
+      </section>
+
+      <!-- RYTHME DE TRAVAIL -->
+      <section class="form-section">
+        <div class="section-label">04 — Rythme de travail</div>
+        <fieldset class="radio-group" id="chronotype-group">
+          <legend>Tu es plutôt...</legend>
+          <label class="radio-card">
+            <input type="radio" name="chronotype" value="earlybird" />
+            <span class="radio-visual"></span>
+            <div class="radio-content">
+              <strong>Early Bird</strong>
+              <span>Chrono-type du matin</span>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="chronotype" value="nightowl" />
+            <span class="radio-visual"></span>
+            <div class="radio-content">
+              <strong>Night Owl</strong>
+              <span>Chrono-type du soir</span>
+            </div>
+          </label>
+        </fieldset>
+        <span class="field-error" id="chronotype-error"></span>
+      </section>
+
+      <!-- CENTRES D'INTÉRÊT -->
+      <section class="form-section">
+        <div class="section-label">05 — Centres d'intérêt</div>
+        <fieldset class="checkbox-group" id="passions-group">
+          <legend>Tes passions <em>(minimum 2)</em></legend>
+          <div class="checkbox-grid">
+            <label class="checkbox-card">
+              <input type="checkbox" name="passions" value="veille" />
+              <span class="checkbox-visual"></span>
+              <span>Veille Tech</span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="passions" value="gaming" />
+              <span class="checkbox-visual"></span>
+              <span>Gaming</span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="passions" value="sport" />
+              <span class="checkbox-visual"></span>
+              <span>Sport</span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="passions" value="musique" />
+              <span class="checkbox-visual"></span>
+              <span>Musique</span>
+            </label>
+            <label class="checkbox-card">
+              <input type="checkbox" name="passions" value="lecture" />
+              <span class="checkbox-visual"></span>
+              <span>Lecture</span>
+            </label>
+          </div>
+        </fieldset>
+        <span class="field-error" id="passions-error"></span>
+      </section>
+
+      <!-- PRÉSENTATION LIBRE -->
+      <section class="form-section">
+        <div class="section-label">06 — Présentation libre</div>
+        <div class="field">
+          <label for="anecdote">
+            Raconte-nous une anecdote ou ton ambition ultime dans la tech.
+            <small id="char-count" class="char-counter">0 / 255</small>
+          </label>
+          <textarea id="anecdote" name="anecdote" rows="5" placeholder="Minimum 25 caractères, maximum 255..."></textarea>
+          <span class="field-error" id="anecdote-error"></span>
+        </div>
+      </section>
+
+      <div class="form-footer">
+        <button type="submit" class="btn-submit">
+          <span class="btn-text">Créer mon profil</span>
+          <span class="btn-line"></span>
+        </button>
+      </div>
+
+    </form>
+
+    <!-- CARTE DE PROFIL -->
+    <div id="profileCard" class="profile-card hidden" role="region" aria-label="Profil créé" aria-live="polite">
+      <div class="card-header">
+        <div class="card-badge">Profil créé</div>
+        <div class="card-avatar" id="card-avatar"></div>
+        <h2 id="card-name"></h2>
+        <p id="card-email"></p>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <span class="card-key">Domaine</span>
+          <span class="card-value" id="card-domaine"></span>
+        </div>
+        <div class="card-row">
+          <span class="card-key">Chrono-type</span>
+          <span class="card-value" id="card-chrono"></span>
+        </div>
+        <div class="card-row">
+          <span class="card-key">Passions</span>
+          <span class="card-value" id="card-passions"></span>
+        </div>
+        <div class="card-anecdote">
+          <p id="card-anecdote"></p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
