@@ -64,10 +64,49 @@ function validationEmail() {
   const domainPart = value.split('@')[1];
 
   // Vérifie le nom de domaine avant le ".com"
-  if (domainPart && /[!#$%^&*(),/?":{}|<>]/.test(domainPart.split('.')[0])) {
+  if (domainPart && /[!#$%^&*()~%`,/?".:{}=|;+<>]/.test(domainPart.split('.')[0])) {
     voirErr('email', 'Le nom de domaine ne peut pas contenir de caractères spéciaux.');
     return false;
   }
+  // Vérifie le nom et prenom avant le @
+  const localPart = value.split('@')[0];
+  if (localPart && /[!#$%^&*()`~,/?".%:{}=|;+<>]/.test(localPart)) {
+    voirErr('email', 'Le nom d\'utilisateur ne peut pas contenir de caractères spéciaux.');
+    return false;
+  }
+  // Vérifie le nom et prenom avant le @ ne peut pas être uniquement numérique
+  if (localPart && /^\d+$/.test(localPart)) {
+    voirErr('email', 'Le nom d\'utilisateur ne peut pas être numérique.');
+    return false;
+  }
+  // Vérifie le nom et prenom avant le @ commence par une lettre
+  if (localPart && !/^[a-zA-Z]/.test(localPart)) {
+    voirErr('email', 'Le nom d\'utilisateur doit commencer par une lettre.');
+    return false;
+  }
+  // Vérifie le nom apres le . doit pas contenir du numérique
+  const domainParts = domainPart ? domainPart.split('.') : [];
+  if (domainParts.length > 1) {
+    const tld = domainParts[domainParts.length - 1];
+    if (/\d/.test(tld)) {
+      voirErr('email', 'Le domaine de premier niveau ne peut pas contenir de chiffres.');
+      return false;
+    }
+  }
+  // Vérifie le nom apres le . doit etre que du lettres minuscules
+  if (domainParts.length > 1) {
+    const tld = domainParts[domainParts.length - 1];
+    if (!/^[a-z]+$/.test(tld)) {
+      voirErr('email', 'Le domaine de premier niveau doit être en lettres minuscules.');
+      return false;
+    }
+  }
+  // ne pas mettre du majuscule dans tout le mail
+    if (/[A-Z]/.test(value)) {
+    voirErr('email', 'L\'adresse email ne doit pas contenir de majuscules.');
+    return false;
+  }
+
 
   // Vérifie si le domaine est uniquement numérique
   if (domainPart && /^\d+$/.test(domainPart.split('.')[0])) {
