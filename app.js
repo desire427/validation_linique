@@ -60,10 +60,26 @@ function validationEmail() {
     voirErr('email', 'L\'adresse email est obligatoire.');
     return false;
   }
-  if (!emailRegex.test(value)) {
-    voirErr('email', 'Format invalide. Ex: prenom.nom@domaine.fr');
+
+  const domainPart = value.split('@')[1];
+
+  // Vérifie le nom de domaine avant le ".com"
+  if (domainPart && /[!#$%^&*(),/?":{}|<>]/.test(domainPart.split('.')[0])) {
+    voirErr('email', 'Le nom de domaine ne peut pas contenir de caractères spéciaux.');
     return false;
   }
+
+  // Vérifie si le domaine est uniquement numérique
+  if (domainPart && /^\d+$/.test(domainPart.split('.')[0])) {
+    voirErr('email', 'Le nom de domaine ne peut pas être numérique.');
+    return false;
+  }
+
+  if (!emailRegex.test(value)) {
+    voirErr('email', 'Format invalide. Ex: prenomnom@domaine.com');
+    return false;
+  }
+
   voirSucc('email');
   return true;
 }
