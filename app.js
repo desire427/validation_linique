@@ -1,5 +1,5 @@
 
-function showError(fieldId, message) {
+function voirErr(fieldId, message) {
   const field = document.getElementById(fieldId);
   const error = document.getElementById(`${fieldId}-error`);
   if (field) {
@@ -10,7 +10,7 @@ function showError(fieldId, message) {
 }
 
 //Marque un champ comme valide et efface l'erreur.
-function showSuccess(fieldId) {
+function voirSucc(fieldId) {
   const field = document.getElementById(fieldId);
   const error = document.getElementById(`${fieldId}-error`);
   if (field) {
@@ -21,7 +21,7 @@ function showSuccess(fieldId) {
 }
 
 // Affiche/efface un message d'erreur hors champ (radio, checkbox).
-function setGroupError(errorId, message) {
+function groupeErr(errorId, message) {
   const error = document.getElementById(errorId);
   if (error) error.textContent = message;
 }
@@ -32,104 +32,104 @@ function setGroupError(errorId, message) {
 
 
 // Valide un champ texte (prénom ou nom).
-function validateTextField(fieldId) {
+function validationTextefield(fieldId) {
   const field = document.getElementById(fieldId);
   const value = field.value.trim();
 
   if (value === '') {
-    showError(fieldId, 'Ce champ est obligatoire.');
+    voirErr(fieldId, 'Ce champ est obligatoire.');
     return false;
   }
   if (value.length < 3) {
-    showError(fieldId, 'Minimum 3 caractères requis.');
+    voirErr(fieldId, 'Minimum 3 caractères requis.');
     return false;
   }
-  showSuccess(fieldId);
+  voirSucc(fieldId);
   return true;
 }
 
 
 
 // Valide l'adresse email.
-function validateEmail() {
+function validationEmail() {
   const field = document.getElementById('email');
   const value = field.value.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (value === '') {
-    showError('email', 'L\'adresse email est obligatoire.');
+    voirErr('email', 'L\'adresse email est obligatoire.');
     return false;
   }
   if (!emailRegex.test(value)) {
-    showError('email', 'Format invalide. Ex: prenom.nom@domaine.fr');
+    voirErr('email', 'Format invalide. Ex: prenom.nom@domaine.fr');
     return false;
   }
-  showSuccess('email');
+  voirSucc('email');
   return true;
 }
 
 
 // Valide le select de domaine.
-function validateDomaine() {
+function validationDomaine() {
   const field = document.getElementById('domaine');
   const value = field.value;
 
   if (value === '') {
-    showError('domaine', 'Merci de sélectionner ton domaine.');
+    voirErr('domaine', 'Merci de sélectionner ton domaine.');
     return false;
   }
-  showSuccess('domaine');
+  voirSucc('domaine');
   return true;
 }
 
 
 
 // Valide les boutons radio du chrono-type.
-function validateChronotype() {
+function validationChronotype() {
   const radios = document.querySelectorAll('input[name="chronotype"]');
   const checked = Array.from(radios).some(r => r.checked);
 
   if (!checked) {
-    setGroupError('chronotype-error', 'Merci de choisir ton chrono-type.');
+    groupeErr('chronotype-error', 'Merci de choisir ton chrono-type.');
     return false;
   }
-  setGroupError('chronotype-error', '');
+  groupeErr('chronotype-error', '');
   return true;
 }
 
 // Valide les cases à cocher des passions.
-function validatePassions() {
+function validationPassion() {
   const checkboxes = document.querySelectorAll('input[name="passions"]:checked');
   const count = checkboxes.length;
 
   if (count < 2) {
-    setGroupError('passions-error', `Sélectionne au moins 2 centres d'intérêt (${count}/2 cochés).`);
+    groupeErr('passions-error', `Sélectionne au moins 2 centres d'intérêt (${count}/2 cochés).`);
     return false;
   }
-  setGroupError('passions-error', '');
+  groupeErr('passions-error', '');
   return true;
 }
 
 
 // Valide le textarea de l'anecdote.
-function validateAnecdote() {
+function validationAnecdote() {
   const field = document.getElementById('anecdote');
   const value = field.value.trim();
   const len = value.length;
 
   if (value === '') {
-    showError('anecdote', 'Ce champ est obligatoire.');
+    voirErr('anecdote', 'Ce champ est obligatoire.');
     return false;
   }
   if (len < 25) {
-    showError('anecdote', `Encore ${25 - len} caractère(s) minimum.`);
+    voirErr('anecdote', `Encore ${25 - len} caractère(s) minimum.`);
     return false;
   }
   if (len > 255) {
-    showError('anecdote', `Trop long : ${len - 255} caractère(s) en trop.`);
+    voirErr('anecdote', `Trop long : ${len - 255} caractère(s) en trop.`);
     return false;
   }
-  showSuccess('anecdote');
+  voirSucc('anecdote');
   return true;
 }
 
@@ -138,7 +138,7 @@ function validateAnecdote() {
    ============================================= */
 
 // Met à jour l'affichage du compteur de caractères du textarea.
-function updateCharCount() {
+function miseajourcoupteur() {
   const field = document.getElementById('anecdote');
   const counter = document.getElementById('char-count');
   const len = field.value.trim().length;
@@ -158,7 +158,7 @@ function updateCharCount() {
    ============================================= */
 
 // Met à jour la classe CSS d'une radio card selon son état.
-function updateRadioCardStyle(radio) {
+function miseajourradio(radio) {
   const allCards = document.querySelectorAll('.radio-card');
   allCards.forEach(card => card.classList.remove('checked'));
   if (radio.checked) {
@@ -168,7 +168,7 @@ function updateRadioCardStyle(radio) {
 
 
 // Met à jour la classe CSS d'une checkbox card selon son état.
-function updateCheckboxCardStyle(checkbox) {
+function miseajourcheckbox(checkbox) {
   const card = checkbox.closest('.checkbox-card');
   if (checkbox.checked) {
     card.classList.add('checked');
@@ -196,7 +196,7 @@ const chronoLabels = {
 };
 
 // Récupère les valeurs du formulaire et affiche la carte de profil.
-function showProfileCard() {
+function voirProfilcree() {
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -227,7 +227,7 @@ function showProfileCard() {
    ============================================= */
 
 // Réinitialise le formulaire et l'état visuel de tous les champs.
-function resetForm() {
+function refuForm() {
   const form = document.getElementById('profileForm');
   form.reset();
 
@@ -259,19 +259,19 @@ function resetForm() {
 function handleSubmit(e) {
   e.preventDefault();
 
-  const isPrenom = validateTextField('prenom');
-  const isNom = validateTextField('nom');
-  const isEmail = validateEmail();
-  const isDomaine = validateDomaine();
-  const isChronotype = validateChronotype();
-  const isPassions = validatePassions();
-  const isAnecdote = validateAnecdote();
+  const isPrenom = validationTextefield('prenom');
+  const isNom = validationTextefield('nom');
+  const isEmail = validationEmail();
+  const isDomaine = validationDomaine();
+  const isChronotype = validationChronotype();
+  const isPassions = validationPassion();
+  const isAnecdote = validationAnecdote();
 
   const allValid = isPrenom && isNom && isEmail && isDomaine && isChronotype && isPassions && isAnecdote;
 
   if (allValid) {
-    showProfileCard();
-    resetForm();
+    voirProfilcree();
+    refuForm();
   } else {
     const firstError = document.querySelector('.error, [id$="-error"]:not(:empty)');
     if (firstError) {
@@ -284,58 +284,58 @@ function handleSubmit(e) {
    FEEDBACK EN TEMPS RÉEL (BLUR / INPUT / CHANGE)
    ============================================= */
 
-function attachRealtimeValidation() {
+function feedbackvalidation() {
   const prenom = document.getElementById('prenom');
   const nom = document.getElementById('nom');
   const email = document.getElementById('email');
   const domaine = document.getElementById('domaine');
   const anecdote = document.getElementById('anecdote');
 
-  prenom.addEventListener('blur', () => validateTextField('prenom'));
+  prenom.addEventListener('blur', () => validationTextefield('prenom'));
   prenom.addEventListener('input', () => {
     if (prenom.classList.contains('error') || prenom.classList.contains('valid')) {
-      validateTextField('prenom');
+      validationTextefield('prenom');
     }
   });
 
-  nom.addEventListener('blur', () => validateTextField('nom'));
+  nom.addEventListener('blur', () => validationTextefield('nom'));
   nom.addEventListener('input', () => {
     if (nom.classList.contains('error') || nom.classList.contains('valid')) {
-      validateTextField('nom');
+      validationTextefield('nom');
     }
   });
 
-  email.addEventListener('blur', () => validateEmail());
+  email.addEventListener('blur', () => validationEmail());
   email.addEventListener('input', () => {
     if (email.classList.contains('error') || email.classList.contains('valid')) {
-      validateEmail();
+      validationEmail();
     }
   });
 
-  domaine.addEventListener('change', () => validateDomaine());
+  domaine.addEventListener('change', () => validationDomaine());
 
   document.querySelectorAll('input[name="chronotype"]').forEach(radio => {
     radio.addEventListener('change', () => {
-      updateRadioCardStyle(radio);
-      validateChronotype();
+      miseajourradio(radio);
+      validationChronotype();
     });
   });
 
   document.querySelectorAll('input[name="passions"]').forEach(checkbox => {
     checkbox.addEventListener('change', () => {
-      updateCheckboxCardStyle(checkbox);
-      validatePassions();
+      miseajourcheckbox(checkbox);
+      validationPassion();
     });
   });
 
   anecdote.addEventListener('input', () => {
-    updateCharCount();
+    miseajourcoupteur();
     if (anecdote.classList.contains('error') || anecdote.classList.contains('valid')) {
-      validateAnecdote();
+      validationAnecdote();
     }
   });
 
-  anecdote.addEventListener('blur', () => validateAnecdote());
+  anecdote.addEventListener('blur', () => validationAnecdote());
 }
 
 /* =============================================
@@ -345,5 +345,5 @@ function attachRealtimeValidation() {
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('profileForm');
   form.addEventListener('submit', handleSubmit);
-  attachRealtimeValidation();
+  feedbackvalidation();
 });
