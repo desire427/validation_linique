@@ -1,17 +1,4 @@
-/* =============================================
-   app.js — Logique de validation du formulaire
-   Mieux se connaître
-   ============================================= */
 
-/* =============================================
-   HELPERS
-   ============================================= */
-
-/**
- * Affiche un message d'erreur sous un champ.
- * @param {string} fieldId  - id du champ
- * @param {string} message  - message à afficher
- */
 function showError(fieldId, message) {
   const field = document.getElementById(fieldId);
   const error = document.getElementById(`${fieldId}-error`);
@@ -22,10 +9,7 @@ function showError(fieldId, message) {
   if (error) error.textContent = message;
 }
 
-/**
- * Marque un champ comme valide et efface l'erreur.
- * @param {string} fieldId - id du champ
- */
+//Marque un champ comme valide et efface l'erreur.
 function showSuccess(fieldId) {
   const field = document.getElementById(fieldId);
   const error = document.getElementById(`${fieldId}-error`);
@@ -36,11 +20,7 @@ function showSuccess(fieldId) {
   if (error) error.textContent = '';
 }
 
-/**
- * Affiche/efface un message d'erreur hors champ (radio, checkbox).
- * @param {string} errorId  - id du span d'erreur
- * @param {string} message  - message (vide = pas d'erreur)
- */
+// Affiche/efface un message d'erreur hors champ (radio, checkbox).
 function setGroupError(errorId, message) {
   const error = document.getElementById(errorId);
   if (error) error.textContent = message;
@@ -50,12 +30,8 @@ function setGroupError(errorId, message) {
    FONCTIONS DE VALIDATION INDIVIDUELLES
    ============================================= */
 
-/**
- * Valide un champ texte (prénom ou nom).
- * Règles : obligatoire, min 3 caractères, pas que des espaces.
- * @param {string} fieldId
- * @returns {boolean}
- */
+
+// Valide un champ texte (prénom ou nom).
 function validateTextField(fieldId) {
   const field = document.getElementById(fieldId);
   const value = field.value.trim();
@@ -72,11 +48,9 @@ function validateTextField(fieldId) {
   return true;
 }
 
-/**
- * Valide l'adresse email.
- * Règles : présence du @ et d'un nom de domaine.
- * @returns {boolean}
- */
+
+
+// Valide l'adresse email.
 function validateEmail() {
   const field = document.getElementById('email');
   const value = field.value.trim();
@@ -94,11 +68,8 @@ function validateEmail() {
   return true;
 }
 
-/**
- * Valide le select de domaine.
- * Règle : l'option par défaut (valeur vide) est rejetée.
- * @returns {boolean}
- */
+
+// Valide le select de domaine.
 function validateDomaine() {
   const field = document.getElementById('domaine');
   const value = field.value;
@@ -111,11 +82,9 @@ function validateDomaine() {
   return true;
 }
 
-/**
- * Valide les boutons radio du chrono-type.
- * Règle : une option doit être cochée.
- * @returns {boolean}
- */
+
+
+// Valide les boutons radio du chrono-type.
 function validateChronotype() {
   const radios = document.querySelectorAll('input[name="chronotype"]');
   const checked = Array.from(radios).some(r => r.checked);
@@ -128,11 +97,7 @@ function validateChronotype() {
   return true;
 }
 
-/**
- * Valide les cases à cocher des passions.
- * Règle : minimum 2 cases cochées.
- * @returns {boolean}
- */
+// Valide les cases à cocher des passions.
 function validatePassions() {
   const checkboxes = document.querySelectorAll('input[name="passions"]:checked');
   const count = checkboxes.length;
@@ -145,11 +110,8 @@ function validatePassions() {
   return true;
 }
 
-/**
- * Valide le textarea de l'anecdote.
- * Règles : min 25 caractères, max 255 caractères, pas que des espaces.
- * @returns {boolean}
- */
+
+// Valide le textarea de l'anecdote.
 function validateAnecdote() {
   const field = document.getElementById('anecdote');
   const value = field.value.trim();
@@ -175,9 +137,7 @@ function validateAnecdote() {
    COMPTEUR DE CARACTÈRES (TEMPS RÉEL)
    ============================================= */
 
-/**
- * Met à jour l'affichage du compteur de caractères du textarea.
- */
+// Met à jour l'affichage du compteur de caractères du textarea.
 function updateCharCount() {
   const field = document.getElementById('anecdote');
   const counter = document.getElementById('char-count');
@@ -197,10 +157,7 @@ function updateCharCount() {
    MISE À JOUR VISUELLE DES CUSTOM INPUTS
    ============================================= */
 
-/**
- * Met à jour la classe CSS d'une radio card selon son état.
- * @param {HTMLInputElement} radio
- */
+// Met à jour la classe CSS d'une radio card selon son état.
 function updateRadioCardStyle(radio) {
   const allCards = document.querySelectorAll('.radio-card');
   allCards.forEach(card => card.classList.remove('checked'));
@@ -209,10 +166,8 @@ function updateRadioCardStyle(radio) {
   }
 }
 
-/**
- * Met à jour la classe CSS d'une checkbox card selon son état.
- * @param {HTMLInputElement} checkbox
- */
+
+// Met à jour la classe CSS d'une checkbox card selon son état.
 function updateCheckboxCardStyle(checkbox) {
   const card = checkbox.closest('.checkbox-card');
   if (checkbox.checked) {
@@ -226,7 +181,7 @@ function updateCheckboxCardStyle(checkbox) {
    CARTE DE PROFIL
    ============================================= */
 
-/** Mapping des labels lisibles pour le select domaine */
+// Mapping des labels lisibles pour le select domaine
 const domainLabels = {
   frontend: 'Front-End',
   backend: 'Back-End',
@@ -234,15 +189,13 @@ const domainLabels = {
   data: 'Data',
 };
 
-/** Mapping des labels lisibles pour le chrono-type */
+// Mapping des labels lisibles pour le chrono-type
 const chronoLabels = {
   earlybird: 'Early Bird — Matin',
   nightowl: 'Night Owl — Soir',
 };
 
-/**
- * Récupère les valeurs du formulaire et affiche la carte de profil.
- */
+// Récupère les valeurs du formulaire et affiche la carte de profil.
 function showProfileCard() {
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
@@ -273,9 +226,7 @@ function showProfileCard() {
    RÉINITIALISATION DU FORMULAIRE
    ============================================= */
 
-/**
- * Réinitialise le formulaire et l'état visuel de tous les champs.
- */
+// Réinitialise le formulaire et l'état visuel de tous les champs.
 function resetForm() {
   const form = document.getElementById('profileForm');
   form.reset();
@@ -304,11 +255,7 @@ function resetForm() {
    SOUMISSION DU FORMULAIRE
    ============================================= */
 
-/**
- * Handler principal de soumission.
- * Valide tous les champs, affiche la carte si tout est valide.
- * @param {Event} e
- */
+// Valide tous les champs, affiche la carte si tout est valide.
 function handleSubmit(e) {
   e.preventDefault();
 
