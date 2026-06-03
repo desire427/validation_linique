@@ -291,31 +291,51 @@ const chronoLabels = {
   nightowl: 'Night Owl — Soir',
 };
 
-// Récupère les valeurs du formulaire et affiche la carte de profil.
-function voirProfilcree() {
-  const prenom = document.getElementById('prenom').value.trim();
-  const nom = document.getElementById('nom').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const domaine = document.getElementById('domaine').value;
-  const chronotype = document.querySelector('input[name="chronotype"]:checked').value;
-  const passions = Array.from(
-    document.querySelectorAll('input[name="passions"]:checked')
-  ).map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1));
-  const anecdote = document.getElementById('anecdote').value.trim();
+// Affiche tous les profils stockés dans le localStorage
+function renderProfiles() {
+  const container = document.getElementById('profilesContainer');
+  const profiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+  
+  container.innerHTML = ''; // On vide le conteneur avant de re-générer
 
-  const initiales = `${prenom.charAt(0)}${nom.charAt(0)}`.toUpperCase();
+  profiles.forEach(profile => {
+    const initiales = `${profile.prenom.charAt(0)}${profile.nom.charAt(0)}`.toUpperCase();
+    const formattedPassions = profile.passions.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ');
 
-  document.getElementById('card-avatar').textContent = initiales;
-  document.getElementById('card-name').textContent = `${prenom} ${nom}`;
-  document.getElementById('card-email').textContent = email;
-  document.getElementById('card-domaine').textContent = domainLabels[domaine] || domaine;
-  document.getElementById('card-chrono').textContent = chronoLabels[chronotype] || chronotype;
-  document.getElementById('card-passions').textContent = passions.join(', ');
-  document.getElementById('card-anecdote').textContent = `"${anecdote}"`;
+    const cardHtml = `
+      <div class="profile-card" role="region" aria-label="Profil de ${profile.prenom}">
+        <div class="card-header">
+          <div class="card-badge">Profil</div>
+          <div class="card-avatar">${initiales}</div>
+          <h2>${profile.prenom} ${profile.nom}</h2>
+          <p>${profile.email}</p>
+        </div>
+        <div class="card-body">
+          <div class="card-row">
+            <span class="card-key">Domaine</span>
+            <span class="card-value">${domainLabels[profile.domaine] || profile.domaine}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-key">Chrono-type</span>
+            <span class="card-value">${chronoLabels[profile.chronotype] || profile.chronotype}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-key">Passions</span>
+            <span class="card-value">${formattedPassions}</span>
+          </div>
+          <div class="card-anecdote">
+            <p>"${profile.anecdote}"</p>
+          </div>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', cardHtml);
+  });
 
-  const card = document.getElementById('profileCard');
-  card.classList.remove('hidden');
-  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // On scrolle vers la dernière carte ajoutée si nécessaire
+  if (profiles.length > 0 && container.lastElementChild) {
+    container.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 /* =============================================
@@ -366,7 +386,37 @@ function handleSubmit(e) {
   const allValid = isPrenom && isNom && isEmail && isDomaine && isChronotype && isPassions && isAnecdote;
 
   if (allValid) {
-    voirProfilcree();
+    const emailInput = document.getElementById('email');
+    const emailValue = emailInput.value.trim().toLowerCase();
+    
+    // Récupérer les profils existants depuis le localStorage
+    const storedProfiles = JSON.parse(localStorage.getItem('profiles') || '[]');
+
+    // Vérifier si l'email existe déjà (insensible à la casse)
+    const emailExists = storedProfiles.some(p => p.email.toLowerCase() === emailValue);
+
+    if (emailExists) {
+      voirErr('email', 'Cet email est déjà utilisé pour un profil existant.');
+      emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return; // On arrête tout si l'email n'est pas unique
+    }
+
+    // Préparer les données du nouveau profil
+    const newProfile = {
+      prenom: document.getElementById('prenom').value.trim(),
+      nom: document.getElementById('nom').value.trim(),
+      email: emailValue,
+      domaine: document.getElementById('domaine').value,
+      chronotype: document.querySelector('input[name="chronotype"]:checked').value,
+      passions: Array.from(document.querySelectorAll('input[name="passions"]:checked')).map(cb => cb.value),
+      anecdote: document.getElementById('anecdote').value.trim()
+    };
+
+    // Ajouter le profil et sauvegarder
+    storedProfiles.push(newProfile);
+    localStorage.setItem('profiles', JSON.stringify(storedProfiles));
+
+    renderProfiles();
     refuForm();
   } else {
     const firstError = document.querySelector('.error, [id$="-error"]:not(:empty)');
@@ -445,4 +495,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('profileForm');
   form.addEventListener('submit', handleSubmit);
   feedbackvalidation();
+  renderProfiles(); // Afficher les profils existants au chargement
 });
