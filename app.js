@@ -40,6 +40,12 @@ function validationTextefield(fieldId) {
     voirErr(fieldId, 'Ce champ est obligatoire.');
     return false;
   }
+
+  if (value.includes('<') || value.includes('>')) {
+    voirErr(fieldId, 'Les balises HTML ne sont pas autorisées.');
+    return false;
+  }
+
   if (value.length < 3) {
     voirErr(fieldId, 'Minimum 3 caractères requis.');
     return false;
@@ -58,6 +64,11 @@ function validationEmail() {
 
   if (value === '') {
     voirErr('email', 'L\'adresse email est obligatoire.');
+    return false;
+  }
+
+  if (value.includes('<') || value.includes('>')) {
+    voirErr('email', 'Les balises HTML ne sont pas autorisées.');
     return false;
   }
 
@@ -128,11 +139,18 @@ function validationEmail() {
 function validationDomaine() {
   const field = document.getElementById('domaine');
   const value = field.value;
+  const validDomaines = ['frontend', 'backend', 'design', 'data'];
 
   if (value === '') {
     voirErr('domaine', 'Merci de sélectionner ton domaine.');
     return false;
   }
+
+  if (!validDomaines.includes(value)) {
+    voirErr('domaine', 'Valeur non autorisée.');
+    return false;
+  }
+
   voirSucc('domaine');
   return true;
 }
@@ -142,20 +160,37 @@ function validationDomaine() {
 // Valide les boutons radio du chrono-type.
 function validationChronotype() {
   const radios = document.querySelectorAll('input[name="chronotype"]');
-  const checked = Array.from(radios).some(r => r.checked);
+  const checkedRadio = Array.from(radios).find(r => r.checked);
+  const validChronotypes = ['earlybird', 'nightowl'];
 
-  if (!checked) {
+  if (!checkedRadio) {
     groupeErr('chronotype-error', 'Merci de choisir ton chrono-type.');
     return false;
   }
+
+  if (!validChronotypes.includes(checkedRadio.value)) {
+    groupeErr('chronotype-error', 'Valeur non autorisée.');
+    return false;
+  }
+
   groupeErr('chronotype-error', '');
   return true;
 }
 
 // Valide les cases à cocher des passions.
 function validationPassion() {
-  const checkboxes = document.querySelectorAll('input[name="passions"]:checked');
-  const count = checkboxes.length;
+  const allCheckboxes = document.querySelectorAll('input[name="passions"]');
+  const checkedBoxes = Array.from(allCheckboxes).filter(cb => cb.checked);
+  const validPassions = ['veille', 'gaming', 'sport', 'musique', 'lecture'];
+
+  const hasInvalid = checkedBoxes.some(cb => !validPassions.includes(cb.value));
+
+  if (hasInvalid) {
+    groupeErr('passions-error', 'Une des valeurs sélectionnées est invalide.');
+    return false;
+  }
+
+  const count = checkedBoxes.length;
 
   if (count < 2) {
     groupeErr('passions-error', `Sélectionne au moins 2 centres d'intérêt (${count}/2 cochés).`);
@@ -176,6 +211,12 @@ function validationAnecdote() {
     voirErr('anecdote', 'Ce champ est obligatoire.');
     return false;
   }
+
+  if (value.includes('<') || value.includes('>')) {
+    voirErr('anecdote', 'Les balises HTML ne sont pas autorisées.');
+    return false;
+  }
+
   if (len < 25) {
     voirErr('anecdote', `Encore ${25 - len} caractère(s) minimum.`);
     return false;
@@ -368,12 +409,14 @@ function feedbackvalidation() {
   });
 
   domaine.addEventListener('change', () => validationDomaine());
+  domaine.addEventListener('blur', () => validationDomaine());
 
   document.querySelectorAll('input[name="chronotype"]').forEach(radio => {
     radio.addEventListener('change', () => {
       miseajourradio(radio);
       validationChronotype();
     });
+    radio.addEventListener('blur', () => validationChronotype());
   });
 
   document.querySelectorAll('input[name="passions"]').forEach(checkbox => {
@@ -381,6 +424,7 @@ function feedbackvalidation() {
       miseajourcheckbox(checkbox);
       validationPassion();
     });
+    checkbox.addEventListener('blur', () => validationPassion());
   });
 
   anecdote.addEventListener('input', () => {
